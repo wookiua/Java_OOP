@@ -12,10 +12,6 @@ public class stringcalculator {
 
         String[] output = numbers.split(",");
 
-        if (output.length > 2){
-            throw new IllegalArgumentException("Error: too many arguments");  
-        }
-
         for (String part : output){
             int num = Integer.parseInt(part);
             sum += num;
