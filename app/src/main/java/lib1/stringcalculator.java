@@ -10,8 +10,12 @@ public class stringcalculator {
 
         int sum = 0;
 
-        String[] output = numbers.split(",");
+        if (numbers.contains(",,") || numbers.contains(",\n") || numbers.contains("\n,") ||numbers.contains("\n\n")){
+            throw new IllegalArgumentException("Error: impossible case");
+        }
 
+        String[] output = numbers.split("[,\n]+");
+     
         for (String part : output){
             int num = Integer.parseInt(part);
             sum += num;

@@ -13,12 +13,40 @@ public class stringcalculatorTest {
 
    
     @Test
-    public void testStep1() {
+    public void TryZero() {
         assertEquals(0, st.add(""));
-        assertEquals(1, st.add("1"));      
-        assertEquals(9, st.add("9"));            
-        assertEquals(16, st.add("11,5")); 
-        assertEquals(36, st.add("11,5,8,12"));
     }
 
-}
+
+    @Test
+    public void TryOne() {
+        assertEquals(1, st.add("1"));
+    }
+
+    @Test
+    public void TryNine() {
+        assertEquals(9, st.add("9"));
+    }
+
+    @Test
+    public void TrySumfromTwo() {
+        assertEquals(16, st.add("11,5"));
+    }
+
+    @Test
+   public void TrySumfromFive() {
+        assertEquals(46, st.add("11,5,8,12,10"));
+    }
+
+    @Test
+   public void TryStep2() {
+        assertEquals(46, st.add("11,5\n8,12\n10"));
+    }
+
+    @Test
+    public void TryExeption() {
+        Exception exception = assertThrows(IllegalArgumentException.class,()-> st.add("11,,5,\n6"));
+    }
+
+    }
+
