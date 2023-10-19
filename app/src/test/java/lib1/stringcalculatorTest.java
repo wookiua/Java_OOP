@@ -68,4 +68,9 @@ public class stringcalculatorTest {
         Exception exception = assertThrows(IllegalArgumentException.class,()-> st.add("//;\n-1;-22,5,6"));
     }
 
+    @Test
+   public void TryStep6_1() {
+        assertEquals(2010, st.add("//;\n5,6,1001,999,1000"));
+    }
+
     }

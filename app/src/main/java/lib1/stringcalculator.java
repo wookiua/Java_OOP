@@ -49,7 +49,9 @@ public class stringcalculator {
             if(num < 0){
                 negativeNumbers.add(num);
             }
-            sum += num;
+            if (num <= 1000){
+                sum += num;
+            }   
         }
         if (!negativeNumbers.isEmpty()){
             throw new IllegalArgumentException("Error: Impossible case of negative numbers: " + negativeNumbers);
