@@ -39,14 +39,28 @@ public class stringcalculatorTest {
     }
 
     @Test
-   public void TryStep2() {
+   public void TryStep3() {
         assertEquals(46, st.add("11,5\n8,12\n10"));
     }
 
     @Test
-    public void TryExeption() {
+    public void TryExeption_Step3() {
         Exception exception = assertThrows(IllegalArgumentException.class,()-> st.add("11,,5,\n6"));
     }
 
+    @Test
+   public void TryStep4_1() {
+        assertEquals(3, st.add("//;\n1;2"));
     }
-
+    
+    @Test
+   public void TryStep4_2() {
+        assertEquals(28, st.add("//;\n1;2,10\n15"));
+    }
+    
+    @Test
+    public void TryExeption_Step4() {
+        Exception exception = assertThrows(IllegalArgumentException.class,()-> st.add("//!!\n1!!2"));
+    }
+    
+    }
