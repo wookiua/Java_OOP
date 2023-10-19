@@ -62,5 +62,10 @@ public class stringcalculatorTest {
     public void TryExeption_Step4() {
         Exception exception = assertThrows(IllegalArgumentException.class,()-> st.add("//!!\n1!!2"));
     }
-    
+
+    @Test
+   public void TryExeption_Step5() {
+        Exception exception = assertThrows(IllegalArgumentException.class,()-> st.add("//;\n-1;-22,5,6"));
+    }
+
     }

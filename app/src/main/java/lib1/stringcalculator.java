@@ -1,5 +1,7 @@
 package src.main.java.lib1;
 
+import java.util.ArrayList;
+
 public class stringcalculator {
     public int add (String numbers) {
         
@@ -27,7 +29,7 @@ public class stringcalculator {
                 }
                 
             }
-            
+
             else{
                 throw new IllegalArgumentException("Error: impossible setting delimiter");
             }
@@ -39,11 +41,30 @@ public class stringcalculator {
         }
 
         String[] output = numbers.split("[,\n" + delimiter + "]+");
+
+        ArrayList <Integer> negativeNumbers = new ArrayList<>();
      
         for (String part : output){
             int num = Integer.parseInt(part);
+            if(num < 0){
+                negativeNumbers.add(num);
+            }
             sum += num;
         }
+        if (!negativeNumbers.isEmpty()){
+            throw new IllegalArgumentException("Error: Impossible case of negative numbers: " + negativeNumbers);
+        }
+
+        else{
         return sum;
     }
+}
+
+    
+public static void main(String args[]){
+    stringcalculator st = new stringcalculator();
+    System.out.println(st.add("//;\n-1;-22,-55,6"));
+}
+
+
 }
