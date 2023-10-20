@@ -73,4 +73,19 @@ public class stringcalculatorTest {
         assertEquals(2010, st.add("//;\n5,6,1001,999,1000"));
     }
 
+    @Test
+   public void TryStep7_1() {
+        assertEquals(28, st.add("//[***]\n1***2,10\n15"));
+    }
+
+    @Test
+   public void TryStep7_2() {
+        assertEquals(28, st.add("//[***]\n1\n2,10\n15"));
+    }
+
+    @Test
+   public void TryExeption_Step7_3() {
+        Exception exception = assertThrows(IllegalArgumentException.class,()-> st.add("//[***]\n1**2,10\n15"));
+    }
+
     }

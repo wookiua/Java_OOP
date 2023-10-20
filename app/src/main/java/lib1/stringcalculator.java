@@ -18,15 +18,25 @@ public class stringcalculator {
             int delimiterIndex = numbers.indexOf("\n");
 
             if (delimiterIndex != -1){
-                delimiter = numbers.substring(2, delimiterIndex);
 
-                if(delimiter.length() > 1){
-                    throw new IllegalArgumentException("Error: delimiter length more than 1");
+                String delimiter_block = numbers.substring(2, delimiterIndex);             
+
+                if(delimiter_block.startsWith("[") && delimiter_block.endsWith("]")){
+                    delimiter = delimiter_block.substring(1, delimiter_block.length() - 1);
+
+                    if(delimiter.isEmpty()){
+                        throw new IllegalArgumentException("Error: impossible setting delimiter");
+                    }
                 }
-
+                
                 else{
-                    numbers = numbers.substring(delimiterIndex + 1);
+                    delimiter = numbers.substring(2, delimiterIndex);
+
+                    if(delimiter.length() > 1){
+                        throw new IllegalArgumentException("Error: delimiter length more than 1");
+                    }
                 }
+                numbers = numbers.substring(delimiterIndex + 1);
                 
             }
 
@@ -36,37 +46,50 @@ public class stringcalculator {
 
         }
 
+
         if (numbers.contains(",,") || numbers.contains(",\n") || numbers.contains("\n,") ||numbers.contains("\n\n")){
             throw new IllegalArgumentException("Error: impossible case");
         }
 
-        String[] output = numbers.split("[,\n" + delimiter + "]+");
+        numbers = numbers.replace('\n',',');
+        numbers = numbers.replace(delimiter,",");
+
+        String[] output = numbers.split("[,]+");
 
         ArrayList <Integer> negativeNumbers = new ArrayList<>();
-     
+
         for (String part : output){
-            int num = Integer.parseInt(part);
-            if(num < 0){
-                negativeNumbers.add(num);
+            if (!part.chars().allMatch(Character::isDigit)) {
+                throw new IllegalArgumentException("Error: illegal delimiter");
             }
-            if (num <= 1000){
-                sum += num;
-            }   
+            if (part.length() > 0){
+                try {
+                    int num = Integer.parseInt(part);
+                    if (num < 0){
+                        negativeNumbers.add(num);
+                    }
+                    if (num <= 1000){
+                        sum += num;
+                    }
+                } catch (NumberFormatException e){
+                    e.printStackTrace();
+                }
+            }
         }
+
         if (!negativeNumbers.isEmpty()){
             throw new IllegalArgumentException("Error: Impossible case of negative numbers: " + negativeNumbers);
         }
-
         else{
-        return sum;
+            return sum;
+        }
+
     }
-}
 
     
-public static void main(String args[]){
-    stringcalculator st = new stringcalculator();
-    System.out.println(st.add("//;\n-1;-22,-55,6"));
-}
-
+    public static void main(String args[]){
+        stringcalculator st = new stringcalculator();
+        System.out.println(st.add("//[!!!]\n!!!22,55,6"));
+    }
 
 }
