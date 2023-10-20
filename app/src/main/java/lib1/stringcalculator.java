@@ -62,19 +62,17 @@ public class stringcalculator {
             if (!part.chars().allMatch(Character::isDigit)) {
                 throw new IllegalArgumentException("Error: illegal delimiter");
             }
-            if (part.length() > 0){
-                try {
-                    int num = Integer.parseInt(part);
-                    if (num < 0){
-                        negativeNumbers.add(num);
-                    }
-                    if (num <= 1000){
-                        sum += num;
-                    }
-                } catch (NumberFormatException e){
-                    e.printStackTrace();
+            if (part.length()>0) {
+                int num = Integer.parseInt(part);
+                if(num < 0){
+                    negativeNumbers.add(num);
                 }
+                // Skip numbers more than 1000
+                if (num <= 1000){
+                    sum += num;
+                }   
             }
+        
         }
 
         if (!negativeNumbers.isEmpty()){
