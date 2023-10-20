@@ -25,11 +25,6 @@ public class stringcalculator {
                     for (String part : delimiter_block.split("[\\[\\]]+")) {
                         if (part.length() > 0) {
                             delimiters.add(part);
-                            if (delimiters.size() > 1){
-                                if(part.length() > 1){
-                                    throw new IllegalArgumentException("Error: delimeter length more than 1");
-                                }
-                            }
                         }
                     }
 
