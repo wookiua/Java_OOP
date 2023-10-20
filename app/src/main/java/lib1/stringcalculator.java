@@ -11,54 +11,65 @@ public class stringcalculator {
         }
 
         int sum = 0;
-        String delimiter = ",";
-
+        ArrayList<String> delimiters = new ArrayList<String>();
+   
         if (numbers.startsWith("//")){
-
+  
             int delimiterIndex = numbers.indexOf("\n");
 
-            if (delimiterIndex != -1){
+            if (delimiterIndex != -1) {
+    
+                String delimiter_block = numbers.substring(2, delimiterIndex);
+                if (delimiter_block.startsWith("[") && delimiter_block.endsWith("]")) {
 
-                String delimiter_block = numbers.substring(2, delimiterIndex);             
-
-                if(delimiter_block.startsWith("[") && delimiter_block.endsWith("]")){
-                    delimiter = delimiter_block.substring(1, delimiter_block.length() - 1);
-
-                    if(delimiter.isEmpty()){
-                        throw new IllegalArgumentException("Error: impossible setting delimiter");
+                    for (String part : delimiter_block.split("[\\[\\]]+")) {
+                        if (part.length() > 0) {
+                            delimiters.add(part);
+                            if (delimiters.size() > 1){
+                                if(part.length() > 1){
+                                    throw new IllegalArgumentException("Error: delimeter length more than 1");
+                                }
+                            }
+                        }
                     }
-                }
-                
-                else{
-                    delimiter = numbers.substring(2, delimiterIndex);
 
-                    if(delimiter.length() > 1){
+                    if (delimiters.size() == 0) {
+                        throw new IllegalArgumentException("Error: impossible setting delimiter");
+                    }   
+                } else {
+
+                    delimiter_block = numbers.substring(2, delimiterIndex);
+
+                    if(delimiter_block.length() > 1) {
                         throw new IllegalArgumentException("Error: delimiter length more than 1");
                     }
+                    delimiters.add(delimiter_block);
                 }
-                numbers = numbers.substring(delimiterIndex + 1);
-                
-            }
 
-            else{
+                numbers = numbers.substring(delimiterIndex + 1);
+            } else {
+
                 throw new IllegalArgumentException("Error: impossible setting delimiter");
             }
-
         }
 
-
-        if (numbers.contains(",,") || numbers.contains(",\n") || numbers.contains("\n,") ||numbers.contains("\n\n")){
+        if (numbers.contains(",,")  || numbers.contains(",\n") || 
+            numbers.contains("\n,") || numbers.contains("\n\n")) {
             throw new IllegalArgumentException("Error: impossible case");
         }
 
         numbers = numbers.replace('\n',',');
-        numbers = numbers.replace(delimiter,",");
+        for (String part : delimiters) {
+            numbers = numbers.replace(part,",");
+        }
 
         String[] output = numbers.split("[,]+");
 
+
         ArrayList <Integer> negativeNumbers = new ArrayList<>();
 
-        for (String part : output){
+        for (String part : output) {
+
             if (!part.chars().allMatch(Character::isDigit)) {
                 throw new IllegalArgumentException("Error: illegal delimiter");
             }
@@ -67,27 +78,25 @@ public class stringcalculator {
                 if(num < 0){
                     negativeNumbers.add(num);
                 }
-                // Skip numbers more than 1000
+
                 if (num <= 1000){
                     sum += num;
                 }   
             }
-        
         }
 
-        if (!negativeNumbers.isEmpty()){
+        if (!negativeNumbers.isEmpty()) {
             throw new IllegalArgumentException("Error: Impossible case of negative numbers: " + negativeNumbers);
         }
-        else{
-            return sum;
-        }
+
+        return sum;
 
     }
 
     
     public static void main(String args[]){
         stringcalculator st = new stringcalculator();
-        System.out.println(st.add("//[!!!]\n!!!22,55,6"));
+        System.out.println(st.add("//[*][!][&]\n1\n2,10*15!10&10"));
     }
 
 }

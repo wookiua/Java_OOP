@@ -88,4 +88,14 @@ public class stringcalculatorTest {
         Exception exception = assertThrows(IllegalArgumentException.class,()-> st.add("//[***]\n1**2,10\n15"));
     }
 
+    @Test
+   public void TryStep8_1() {
+        assertEquals(48, st.add("//[*][!][&]\n1\n2,10*15!10&10"));
+    }
+
+    @Test
+   public void TryExeption_Step8_2() {
+        Exception exception = assertThrows(IllegalArgumentException.class,()-> st.add("//[**][!][&]\n1\n2,10*15!10&10"));
+    }
+
     }
