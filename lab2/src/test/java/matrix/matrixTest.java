@@ -42,7 +42,7 @@ public class matrixTest {
         assertEquals("[ 0.0 0.0 ]\n[ 0.0 0.0 ]\n", m1.Druc());
     }  
 
-    // Step 2 ----------------
+    // Step 3 ----------------
 
     @Test
     public void step2WrongFillCell() {
@@ -71,7 +71,7 @@ public class matrixTest {
         assertEquals("[ 2.1 0.0 0.0 0.0 ]\n[ 2.2 0.0 0.0 0.0 ]\n",m1.Druc());
     }  
 
-    // Step 3 ----------------
+    // Step 4 ----------------
 
     @Test
     public void step3GetCell() {
@@ -96,13 +96,32 @@ public class matrixTest {
         assertArrayEquals(reference,m1.getY(2));
     } 
     
-    // Step 4 ----------------
+    // Step 5 ----------------
 
     @Test
-    public void step4Rozm() {
+    public void Rozm() {
         Matrix m1 = new Matrix(4,2);
         m1.fillY(1, 2.1, 2.2);
         assertEquals("4 x 2\n",m1.Rozm());
+    } 
+
+    // Step 6 ----------------
+
+    @Test
+    public void GetHash() {
+        Matrix m1 = new Matrix(4,2);
+        m1.fillY(1, 2.1, 2.2);
+        assertEquals(-401279905,m1.getHash());
+    } 
+
+    @Test
+    public void IsEqual() {
+        Matrix m1 = new Matrix(4,2);
+        m1.fillY(1, 2.1, 2.2);
+        Matrix m2 = new Matrix(4,2);
+        m2.fillY(1, 2.1, 2.2);
+        assertEquals(true,m1.isEqual(m2));
     }
+
 
 }
