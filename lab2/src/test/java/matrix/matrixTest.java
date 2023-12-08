@@ -123,5 +123,31 @@ public class matrixTest {
         assertEquals(true,m1.isEqual(m2));
     }
 
+    // Step 7 ----------------
+
+    @Test
+    public void XSize() {
+        Matrix m1 = new Matrix(4,2);
+        assertEquals(4, m1.XSize());
+    } 
+
+    @Test
+    public void YSize() {
+        Matrix m1 = new Matrix(4,2);
+        assertEquals(2, m1.YSize());
+    } 
+
+    @Test
+    public void CreateImmutable() {
+        Matrix m = new Matrix(4,2);
+        IMatrix im = new IMatrix(m);
+        assertEquals(m.getHash(), im.getHash());
+    } 
+
+    @Test
+    public void ChangeImmutable() {
+        IMatrix im = new IMatrix(4,2);
+        Exception exception = assertThrows(IllegalArgumentException.class,()-> im.fillCell(1, 1, 1.5));
+    } 
 
 }

@@ -120,6 +120,16 @@ public class Matrix {
         return false;
     } 
 
+    // Step 7 ----------------    
+
+    public int XSize () {
+        return this._x;
+    }
+
+    public int YSize () {
+        return this._y;
+    } 
+
     public static void main(String args[]){
         Matrix m = new Matrix(4, 2);
         Matrix m2 = new Matrix(m);
@@ -129,6 +139,9 @@ public class Matrix {
         System.out.println(m.Rozm());
         System.out.println(m.getHash());
         System.out.println(m.isEqual(m2));
+        System.out.println(m.Druc());
+        IMatrix im = new IMatrix(m);
+        System.out.println(im.Druc());
     }
 
 };
