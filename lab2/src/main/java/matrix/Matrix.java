@@ -3,56 +3,79 @@ package matrix;
 
 public class Matrix {
  
-    private int[][] _data = null;
+    private double[][] _data = null;
     private int _x=0, _y=0;
 
     public Matrix(int x, int y) {
         this._x = x;
         this._y = y;
-        _data = new int [this._x][this._y];
+        _data = new double [this._x][this._y];
     }
 
     public Matrix() {
         this._x = 0;
         this._y = 0;
-        _data = new int [this._x][this._y];
+        _data = new double [this._x][this._y];
     }    
 
     public Matrix(Matrix m_other) {
         this._data = m_other._data.clone();
         this._x = m_other._x;
         this._y = m_other._y;        
-        _data = new int [this._x][this._y];
+        _data = new double [this._x][this._y];
     }    
 
     public int GetSize() {
         return this._x * this._y;
     }
 
-    public void Druc() {
+    public String Druc() {
+        String output = "";
         if (this._x == 0 || this._y == 0) {
-            System.out.println("[]");
-            return;
+            output = "[]\n";
+            return output;
         }
-
-        
         for (int j=0; j<this._y; j++) {
-            System.out.print("[ ");
+            output += "[ ";
             for (int i=0; i<this._x; i++) {
-                System.out.print(this._data[i][j]+" ");
+                output += this._data[i][j]+" ";
             }
-            System.out.println("]");
+            output +="]\n";
         }
-    
-
+        return output;
     }
 
-    
+    public void fillCell (int x, int y, double val) {
+        if (x <=0 || x > this._x || y <= 0 || y > this._y ) {
+            throw new IllegalArgumentException("Row or Column numbers are wrong for this Matrix");
+        }
+        this._data[x-1][y-1] = val;
+    }    
+
+    public void fillX (int y, double... val) {
+        if ( val.length != this._x ) {
+            throw new IllegalArgumentException("Row (X) count values is wrong for this Matrix");
+        } 
+        for (int i = 0; i < val.length; i++){
+            this.fillCell(i+1, y, val[i]);
+        }
+    }
+
+    public void fillY (int x, double... val) {
+        if ( val.length != this._y ) {
+            throw new IllegalArgumentException("Column (Y) count values is wrong for this Matrix");
+        } 
+        for (int i = 0; i < val.length; i++){
+            this.fillCell(x, i+1, val[i]);
+        }
+    }    
 
     public static void main(String args[]){
-        Matrix m = new Matrix(5, 3);
-        System.out.println("Matrix size: "+ m.GetSize());
-        m.Druc();
+        Matrix m = new Matrix(4, 5);
+        //m.fillCell(1, 1, 2);
+        m.fillX(1, 1, 2, 3, 4);
+        //System.out.println("Matrix size: "+ m.GetSize());
+        System.out.println(m.Druc());
     }
 
 };
