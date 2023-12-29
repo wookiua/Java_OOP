@@ -22,11 +22,19 @@ public class Matrix {
     }    
 
     public Matrix(Matrix m_other) {
-        this._data = m_other._data.clone();
         this._x = m_other._x;
         this._y = m_other._y;        
-        _data = new double [this._x][this._y];
-    }    
+        this._data = new double [this._x][this._y];
+        for (int i=0; i<this._x; i++) 
+            for (int j=0; j<this._y; j++) 
+                this._data[i][j] = m_other._data[i][j];
+    } 
+    
+    public void fillRandom(double min, double max) {   
+        for (int i=0; i<this._x; i++) 
+            for (int j=0; j<this._y; j++) 
+                this._data[i][j] = min + Math.random()*(max-min);
+    }
 
     public int GetSize() {
         return this._x * this._y;
@@ -41,7 +49,7 @@ public class Matrix {
         for (int j=0; j<this._y; j++) {
             output += "[ ";
             for (int i=0; i<this._x; i++) {
-                output += this._data[i][j]+" ";
+                output += String.format( "%.1f", this._data[i][j] )+" ";
             }
             output +="]\n";
         }
@@ -121,7 +129,7 @@ public class Matrix {
     } 
 
     // Step 7 ----------------    
-
+ 
     public int XSize () {
         return this._x;
     }
@@ -130,18 +138,164 @@ public class Matrix {
         return this._y;
     } 
 
-    public static void main(String args[]){
-        Matrix m = new Matrix(4, 2);
-        Matrix m2 = new Matrix(m);
-        m.fillY(2, 1, 1);
-        m2.fillY(2, 1, 1);
-        //System.out.println("Matrix size: "+ m.GetSize());
-        System.out.println(m.Rozm());
-        System.out.println(m.getHash());
-        System.out.println(m.isEqual(m2));
-        System.out.println(m.Druc());
-        IMatrix im = new IMatrix(m);
-        System.out.println(im.Druc());
+    // Step 8 ----------------    
+
+    public Matrix plus(Matrix m_other) {
+        if (!this.Rozm().equals(m_other.Rozm())) {
+            throw new IllegalArgumentException("Can't add Matrices with differ sizes");
+        }
+        Matrix m_plus = new Matrix(this._x, this._y); 
+        for (int i=0; i<this._x; i++) 
+            for (int j=0; j<this._y; j++) 
+                m_plus.fillCell(i+1, j+1, this._data[i][j] + m_other.getCell(i+1, j+1));
+        return m_plus;
+    }    
+
+    public Matrix mulScalar(double k) {
+        Matrix m_mulScalar = new Matrix(this._x, this._y); 
+        for (int i=0; i<this._x; i++) 
+            for (int j=0; j<this._y; j++) 
+                m_mulScalar.fillCell(i+1, j+1, this._data[i][j] * k);
+        return m_mulScalar;
+    }    
+
+    // Step 9 ----------------    
+
+    public void addCell (int x, int y, double val) {
+        if (x <=0 || x > this._x || y <= 0 || y > this._y ) {
+            throw new IllegalArgumentException("Row or Column numbers are wrong for this Matrix");
+        }
+        this._data[x-1][y-1] += val;
+    }  
+
+    public Matrix mul(Matrix m_other) {
+
+        if (this.XSize() != m_other.YSize()) {
+            throw new IllegalArgumentException("Can't multiply Matrices A*B where A(X) != B(Y)");
+        }
+        Matrix m_plus = new Matrix(m_other.XSize(), this.YSize()); 
+
+        for (int i=0; i<m_other.XSize(); i++) 
+
+            for (int j=0; j<this.YSize(); j++) 
+
+                for (int ii=0; ii<this.XSize(); ii++) 
+                    m_plus.addCell(i+1, j+1, this.getCell(ii+1, j+1) * m_other.getCell(i+1, ii+1));
+        return m_plus;
     }
+
+    // Step 10 ----------------    
+
+    public Matrix transponse() {
+        Matrix m_trans = new Matrix(this.YSize(), this.XSize()); 
+        for (int i=0; i<this.YSize(); i++) 
+            for (int j=0; j<this.XSize(); j++) 
+                m_trans.addCell(i+1, j+1, this.getCell(j+1, i+1));
+        return m_trans;
+    }
+
+    // Step 11 ----------------    
+
+    public Matrix (double... vec) {
+        if (vec.length == 0) {
+            throw new IllegalArgumentException("Can't create zerro matrix");
+        }
+        this._x = vec.length;
+        this._y = vec.length;        
+        this._data = new double [this._x][this._y];
+        for (int i=0; i<vec.length; i++) 
+            for (int j=0; j<vec.length; j++) 
+                if ( i == j ) this._data[i][j] = vec[i];
+    }    
+
+    // Step 12 ----------------    
+
+    public Matrix (int m_rozmirn) {
+        if (m_rozmirn == 0) {
+            throw new IllegalArgumentException("Can't create zerro matrix");
+        }
+        this._x = m_rozmirn;
+        this._y = m_rozmirn;         
+        this._data = new double [this._x][this._y];
+        for (int i=0; i<m_rozmirn; i++) 
+            for (int j=0; j<m_rozmirn; j++) 
+                if ( i == j ) this._data[i][j] = 1.0;
+ 
+    }   
+    
+    // Step 13,14 ----------------    
+
+    public Matrix createRandomX(int x_size, int from, int to) {
+        if (x_size == 0) {
+            throw new IllegalArgumentException("Can't create zerro matrix");
+        }
+        this._x = x_size;
+        this._y = 1;
+        this._data = new double [this._x][this._y];
+        for (int i=0; i<x_size; i++) 
+            if (from < to) this._data[i][0] = Math.random()*(to-from)+from;
+                else this._data[i][0] = Math.random()*(from-to)+to;
+        return this;
+    }     
+    
+    public Matrix createRandomY(int y_size, int from, int to) {
+        if (y_size == 0) {
+            throw new IllegalArgumentException("Can't create zerro matrix");
+        }
+        this._x = 1;
+        this._y = y_size;
+        this._data = new double [this._x][this._y];
+        for (int j=0; j<y_size; j++) 
+            if (from < to) this._data[0][j] = Math.random()*(to-from)+from;
+                else this._data[0][j] = Math.random()*(from-to)+to;
+        return this;
+    }    
+    
+    // Step 15 ----------------    
+
+    public int getSquareSize() {
+        if (this._x != this._y || this._x == 0 || this._y == 0) {
+            return 0;
+        }
+        return this._x;
+    }
+
+    public Matrix modifyUpperTriang() {
+        if (this.getSquareSize() == 0) {
+            throw new IllegalArgumentException("Matrix not square or zerro. Can't change to upper triangular.");
+        }
+
+        for (int i=0; i<this._x; i++) 
+            for (int j=0; j<this._y; j++) 
+                if ( i < j ) this._data[i][j] = 0;
+        return this;
+    } 
+    
+    public Matrix modifyLowerTriang() {
+        if (this.getSquareSize() == 0) {
+            throw new IllegalArgumentException("Matrix not square or zerro. Can't change to lower triangular.");
+        }
+
+        for (int i=0; i<this._x; i++) 
+            for (int j=0; j<this._y; j++) 
+                if ( i > j ) this._data[i][j] = 0;
+        return this;
+    }     
+    
+    public static void main(String args[]){
+        Matrix m = new Matrix(2, 3);
+        Matrix m2 = new Matrix(3,2);
+        
+        m.fillRandom(10, 20);
+        m2.fillRandom(10, 20);
+        Matrix m3 = new Matrix(m2);
+        //m.createRandomX(3, 01, 05);
+       // Matrix m3 = im.mul(m);
+        System.out.println(m.Druc());
+        System.out.println(m2.Druc());
+        System.out.println(m3.Druc());
+    }
+
+
 
 };
